@@ -1,0 +1,23 @@
+opam-version: "2.0"
+name: "olox"
+version: "0.0.1"
+maintainer: "Kevin Ji"
+authors: ["Kevin Ji"]
+homepage: "https://github.com/kevinji/olox"
+bug-reports: "https://github.com/kevinji/olox/issues"
+dev-repo: "git+https://github.com/kevinji/olox.git"
+license: "MIT"
+
+build: [
+  [ "dune" "subst" ] { pinned }
+  [ "dune" "build" "-p" name "-j" jobs ]
+]
+
+depends: [
+  "ocaml" { >= "4.06.0" }
+  "dune" { build & >= "1.8.0" }
+  "async"
+  "core"
+  "ppxlib"
+  "ppx_jane"
+]

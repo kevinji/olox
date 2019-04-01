@@ -1,0 +1,8 @@
+(executable
+ (name olox)
+ (libraries core olox_lib)
+ (preprocess (pps ppxlib ppx_jane)))
+
+(alias
+ (name default)
+ (deps (alias_rec all)))
