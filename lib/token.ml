@@ -24,9 +24,9 @@ module Type = struct
     | LESS : unit t
     | LESS_EQUAL : unit t
     (* Literals. *)
-    | IDENTIFIER : string t
-    | STRING : string t
-    | NUMBER : float t
+    | IDENTIFIER : string -> string t
+    | STRING : string -> string t
+    | NUMBER : float -> float t
     (* Keywords. *)
     | AND : unit t
     | CLASS : unit t
@@ -46,7 +46,7 @@ module Type = struct
     | WHILE : unit t
     | EOF : unit t
 
-  let to_string (type a) (t : a t) =
+  let name (type a) (t : a t) =
     match t with
     | LEFT_PAREN -> "LEFT_PAREN"
     | RIGHT_PAREN -> "RIGHT_PAREN"
@@ -67,9 +67,9 @@ module Type = struct
     | GREATER_EQUAL -> "GREATER_EQUAL"
     | LESS -> "LESS"
     | LESS_EQUAL -> "LESS_EQUAL"
-    | IDENTIFIER -> "IDENTIFIER"
-    | STRING -> "STRING"
-    | NUMBER -> "NUMBER"
+    | IDENTIFIER (_ : string) -> "IDENTIFIER"
+    | STRING (_ : string) -> "STRING"
+    | NUMBER (_ : float) -> "NUMBER"
     | AND -> "AND"
     | CLASS -> "CLASS"
     | ELSE -> "ELSE"
@@ -88,13 +88,55 @@ module Type = struct
     | WHILE -> "WHILE"
     | EOF -> "EOF"
   ;;
+
+  let literal (type a) (t : a t) =
+    match t with
+    | IDENTIFIER identifier -> identifier
+    | STRING string -> string
+    | NUMBER number -> Float.to_string number
+    | LEFT_PAREN -> ""
+    | RIGHT_PAREN -> ""
+    | LEFT_BRACE -> ""
+    | RIGHT_BRACE -> ""
+    | COMMA -> ""
+    | DOT -> ""
+    | MINUS -> ""
+    | PLUS -> ""
+    | SEMICOLON -> ""
+    | SLASH -> ""
+    | STAR -> ""
+    | BANG -> ""
+    | BANG_EQUAL -> ""
+    | EQUAL -> ""
+    | EQUAL_EQUAL -> ""
+    | GREATER -> ""
+    | GREATER_EQUAL -> ""
+    | LESS -> ""
+    | LESS_EQUAL -> ""
+    | AND -> ""
+    | CLASS -> ""
+    | ELSE -> ""
+    | FALSE -> ""
+    | FUN -> ""
+    | FOR -> ""
+    | IF -> ""
+    | NIL -> ""
+    | OR -> ""
+    | PRINT -> ""
+    | RETURN -> ""
+    | SUPER -> ""
+    | THIS -> ""
+    | TRUE -> ""
+    | VAR -> ""
+    | WHILE -> ""
+    | EOF -> ""
+  ;;
 end
 
 type 'a t =
   { type_ : 'a Type.t
   ; lexeme : string
-  ; literal : 'a
   ; line : int
   }
 
-let to_string t = sprintf !"%{Type} %s %s" t.type_ t.lexeme "Literal should be here"
+let to_string t = sprintf "%s %s %s" (Type.name t.type_) t.lexeme (Type.literal t.type_)
