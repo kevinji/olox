@@ -24,7 +24,9 @@ module Tokenizer = struct
     | _ -> false
   ;;
 
-  let keyword_tokens =
+  let keyword_name token_type = Token.Type.name token_type |> String.lowercase
+
+  let keyword_map =
     [ Token.Type.AND
     ; CLASS
     ; ELSE
@@ -43,9 +45,9 @@ module Tokenizer = struct
     ; WHILE
     ; EOF
     ]
+    |> List.map ~f:(fun token_type -> keyword_name token_type, token_type)
+    |> Map.of_alist_exn (module String)
   ;;
-
-  let keyword_name token_type = Token.Type.name token_type |> String.lowercase
 
   (* Tokens. *)
   open Angstrom
@@ -95,21 +97,12 @@ module Tokenizer = struct
     >>| fun number -> token (NUMBER (Float.of_string number)) number
   ;;
 
-  let keyword =
-    List.map keyword_tokens ~f:(fun token_type ->
-        let keyword = keyword_name token_type in
-        string keyword
-        <* (peek_char
-           >>= function
-           | None -> return ()
-           | Some ch -> if is_alphanum ch then fail "Not a keyword." else return ())
-        >>| token token_type)
-    |> choice ~failure_msg:"Not a keyword."
-  ;;
-
-  let identifier =
+  let keyword_or_identifier =
     take_while1 is_alphanum
-    >>| fun identifier -> token (IDENTIFIER identifier) identifier
+    >>| fun identifier ->
+    match Map.find keyword_map identifier with
+    | Some keyword_type -> token keyword_type identifier
+    | None -> token (IDENTIFIER identifier) identifier
   ;;
 
   let program =
@@ -145,8 +138,7 @@ module Tokenizer = struct
             ; whitespace
             ; string_
             ; number
-            ; keyword
-            ; identifier
+            ; keyword_or_identifier
             ]
           >>| Fn.(flip compose)
           <*> p)
