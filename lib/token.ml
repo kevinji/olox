@@ -1,4 +1,5 @@
 open Core
+open! Import
 
 module Type = struct
   type t =
@@ -45,6 +46,9 @@ module Type = struct
     | VAR
     | WHILE
     | EOF
+  [@@deriving compare, sexp_of]
+
+  include (val Comparator.make ~compare ~sexp_of_t)
 
   let name = function
     | LEFT_PAREN -> "LEFT_PAREN"
@@ -105,4 +109,6 @@ type t =
   ; line : int
   }
 
-let to_string t = sprintf "%s %s %s" (Type.name t.type_) t.lexeme (Type.literal t.type_)
+let to_string t =
+  [ Type.name t.type_; t.lexeme; Type.literal t.type_ ] |> String.concat ~sep:" "
+;;

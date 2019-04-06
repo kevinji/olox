@@ -1,6 +1,6 @@
 (library
  (name olox_lib)
- (libraries async core)
+ (libraries angstrom async core)
  (preprocess (pps ppxlib ppx_jane)))
 
 (alias

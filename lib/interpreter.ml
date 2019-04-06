@@ -1,17 +1,16 @@
 open Core
 open Async
-
-let _fail ~line ~message = Or_error.errorf "[line %d] Error: %s\n" line message
+open! Import
 
 let run ~source =
-  let open Deferred.Or_error.Let_syntax in
-  String.iter source ~f:(fun token -> printf "%c\n" token);
-  return ()
+  match Scanner.parse ~source with
+  | Ok tokens -> List.iter tokens ~f:(printf !"%{Token}\n")
+  | Error error -> printf !"Error processing source: %{Error#hum}\n" error
 ;;
 
 let run_file ~file =
   let open Deferred.Or_error.Let_syntax in
-  let%bind source = Monitor.try_with_or_error (fun () -> Reader.file_contents file) in
+  let%map source = Monitor.try_with_or_error (fun () -> Reader.file_contents file) in
   run ~source
 ;;
 
@@ -22,7 +21,7 @@ let repl () =
     print_string "> ";
     match%bind Reader.read_line stdin |> Deferred.ok with
     | `Ok source ->
-      let%bind () = run ~source in
+      run ~source;
       read_and_run ()
     | `Eof ->
       print_newline ();

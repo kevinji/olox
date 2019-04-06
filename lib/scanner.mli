@@ -1,6 +1,3 @@
 open! Core
 
-type t =
-  { source : string
-  ; tokens : Token.t array
-  }
+val parse : source:string -> Token.t list Or_error.t

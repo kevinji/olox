@@ -45,6 +45,11 @@ module Type : sig
     | VAR
     | WHILE
     | EOF
+  [@@deriving compare, sexp_of]
+
+  include Comparator.S with type t := t
+
+  val name : t -> string
 end
 
 type t =
