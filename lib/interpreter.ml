@@ -5,7 +5,7 @@ open! Import
 let run ~source =
   match Scanner.parse ~source with
   | Ok tokens -> List.iter tokens ~f:(printf !"%{Token}\n")
-  | Error error -> printf !"Error processing source: %{Error#hum}\n" error
+  | Error error -> printf !"%{Error#hum}\n" error
 ;;
 
 let run_file ~file =
