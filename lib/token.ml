@@ -1,4 +1,5 @@
-open Core
+open! Core
+open! Async
 open! Import
 
 module Type = struct
@@ -50,6 +51,8 @@ module Type = struct
 
   include (val Comparator.make ~compare ~sexp_of_t)
 
+  let equal = [%compare.equal: t]
+
   let name = function
     | LEFT_PAREN -> "LEFT_PAREN"
     | RIGHT_PAREN -> "RIGHT_PAREN"
@@ -93,13 +96,44 @@ module Type = struct
   ;;
 
   let literal = function
-    | IDENTIFIER str | STRING str -> str
-    | NUMBER float -> Float.to_string float
-    | LEFT_PAREN | RIGHT_PAREN | LEFT_BRACE | RIGHT_BRACE | COMMA | DOT | MINUS | PLUS
-    | SEMICOLON | SLASH | STAR | BANG | BANG_EQUAL | EQUAL | EQUAL_EQUAL | GREATER
-    | GREATER_EQUAL | LESS | LESS_EQUAL | AND | CLASS | ELSE | FALSE | FUN | FOR | IF
-    | NIL | OR | PRINT | RETURN | SUPER | THIS | TRUE | VAR | WHILE | EOF ->
-      ""
+    | IDENTIFIER str | STRING str -> Some str
+    | NUMBER float -> Some (Float.to_string float)
+    | LEFT_PAREN
+    | RIGHT_PAREN
+    | LEFT_BRACE
+    | RIGHT_BRACE
+    | COMMA
+    | DOT
+    | MINUS
+    | PLUS
+    | SEMICOLON
+    | SLASH
+    | STAR
+    | BANG
+    | BANG_EQUAL
+    | EQUAL
+    | EQUAL_EQUAL
+    | GREATER
+    | GREATER_EQUAL
+    | LESS
+    | LESS_EQUAL
+    | AND
+    | CLASS
+    | ELSE
+    | FALSE
+    | FUN
+    | FOR
+    | IF
+    | NIL
+    | OR
+    | PRINT
+    | RETURN
+    | SUPER
+    | THIS
+    | TRUE
+    | VAR
+    | WHILE
+    | EOF -> None
   ;;
 end
 
@@ -108,7 +142,10 @@ type t =
   ; lexeme : string
   ; line : int
   }
+[@@deriving sexp_of]
 
 let to_string t =
-  [ Type.name t.type_; t.lexeme; Type.literal t.type_ ] |> String.concat ~sep:" "
+  [ Some (Type.name t.type_); Some t.lexeme; Type.literal t.type_ ]
+  |> List.filter_opt
+  |> String.concat ~sep:" "
 ;;

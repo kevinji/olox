@@ -1,5 +1,5 @@
-open Core
-open Async
+open! Core
+open! Async
 open! Import
 
 type t =
@@ -19,7 +19,7 @@ module Tokenizer = struct
 
   let token_ch type_ lexeme = token type_ (Char.to_string lexeme)
   let is_newline = Char.( = ) '\n'
-  let whitespace_chars = Char.Set.of_list [ ' '; '\r'; '\t' ]
+  let whitespace_chars = Set.of_list (module Char) [ ' '; '\r'; '\t' ]
 
   let is_alphanum = function
     | 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' -> true
@@ -121,7 +121,7 @@ module Tokenizer = struct
   let error =
     any_char
     >>| (fun ch t ->
-          printf "[line %d] Error: Unexpected character %c\n" t.line ch;
+          print_err ~line:t.line (sprintf "Unexpected character %c" ch);
           { t with has_error = true })
     <?> "ERROR"
   ;;

@@ -1,7 +1,7 @@
 lib: [
-  "_build/install/default/lib/olox/META" {"META"}
-  "_build/install/default/lib/olox/dune-package" {"dune-package"}
-  "_build/install/default/lib/olox/opam" {"opam"}
+  "_build/install/default/lib/olox/META"
+  "_build/install/default/lib/olox/dune-package"
+  "_build/install/default/lib/olox/opam"
 ]
 doc: [
   "_build/install/default/doc/olox/LICENSE"

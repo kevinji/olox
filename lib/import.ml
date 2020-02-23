@@ -1,4 +1,4 @@
-open Core
-include Core_kernel.No_polymorphic_compare
+open! Core
+open! Async
 
-let fail ~line message = printf "[line %d] Error: %s\n" line message
+let print_err ~line message = printf "[line %d] Error: %s\n" line message

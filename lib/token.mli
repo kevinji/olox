@@ -1,4 +1,6 @@
 open! Core
+open! Async
+open! Import
 
 module Type : sig
   type t =
@@ -49,6 +51,7 @@ module Type : sig
 
   include Comparator.S with type t := t
 
+  val equal : t -> t -> bool
   val name : t -> string
 end
 
@@ -57,5 +60,6 @@ type t =
   ; lexeme : string
   ; line : int
   }
+[@@deriving sexp_of]
 
 val to_string : t -> string

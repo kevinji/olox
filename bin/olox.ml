@@ -1,6 +1,6 @@
 open! Core
-open Async
-open Import
+open! Async
+open! Import
 
 let command =
   Command.async_or_error

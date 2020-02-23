@@ -1,6 +1,7 @@
-open Core
-open Async
+open! Core
+open! Async
 open! Import
+open! Deferred.Or_error.Let_syntax
 
 let run ~source =
   match Scanner.parse ~source with
@@ -9,13 +10,11 @@ let run ~source =
 ;;
 
 let run_file ~file =
-  let open Deferred.Or_error.Let_syntax in
   let%map source = Monitor.try_with_or_error (fun () -> Reader.file_contents file) in
   run ~source
 ;;
 
 let repl () =
-  let open Deferred.Or_error.Let_syntax in
   let stdin = force Reader.stdin in
   let rec read_and_run () =
     print_string "> ";
