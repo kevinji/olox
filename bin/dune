@@ -1,8 +1,10 @@
 (executable
  (name olox)
- (libraries core olox_lib)
- (preprocess (pps ppxlib ppx_jane)))
+ (libraries async core core_unix.command_unix olox_lib)
+ (preprocess
+  (pps ppx_jane)))
 
 (alias
  (name default)
- (deps (alias_rec all)))
+ (deps
+  (alias_rec all)))

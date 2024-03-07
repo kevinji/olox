@@ -1,8 +1,10 @@
 (library
  (name olox_lib)
  (libraries angstrom async core)
- (preprocess (pps ppxlib ppx_jane)))
+ (preprocess
+  (pps ppx_jane)))
 
 (alias
  (name default)
- (deps (alias_rec all)))
+ (deps
+  (alias_rec all)))

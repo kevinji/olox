@@ -14,8 +14,8 @@ module Binary_match = struct
     | Match _ | No_match [] -> t
     | No_match (token :: tokens) ->
       (match f token.type_ with
-      | None -> t
-      | Some expr -> Match (expr, tokens))
+       | None -> t
+       | Some expr -> Match (expr, tokens))
   ;;
 
   let to_option = function
@@ -35,8 +35,8 @@ let rec any op_list tokens =
   | [] -> None
   | op :: op_list ->
     (match op tokens with
-    | Some _ as result -> result
-    | None -> any op_list tokens)
+     | Some _ as result -> result
+     | None -> any op_list tokens)
 ;;
 
 let rec parse_expression tokens = parse_equality tokens
@@ -47,9 +47,9 @@ and parse_equality tokens =
     let some_match =
       Binary_match.return tokens
       |> Binary_match.bind ~f:(function
-             | EQUAL -> Some Expr.Equal
-             | BANG_EQUAL -> Some Expr.Not_equal
-             | _ -> None)
+        | EQUAL -> Some Expr.Equal
+        | BANG_EQUAL -> Some Expr.Not_equal
+        | _ -> None)
       |> Binary_match.to_option
     in
     match some_match with
@@ -66,11 +66,11 @@ and parse_comparison tokens : bool Expr.expression * Token.t list =
   let some_match =
     Binary_match.return tokens
     |> Binary_match.bind ~f:(function
-           | GREATER -> Some Expr.Greater
-           | GREATER_EQUAL -> Some Expr.Greater_equal
-           | LESS -> Some Expr.Less
-           | LESS_EQUAL -> Some Expr.Less_equal
-           | _ -> None)
+      | GREATER -> Some Expr.Greater
+      | GREATER_EQUAL -> Some Expr.Greater_equal
+      | LESS -> Some Expr.Less
+      | LESS_EQUAL -> Some Expr.Less_equal
+      | _ -> None)
     |> Binary_match.to_option
   in
   match some_match with
@@ -85,9 +85,9 @@ and parse_addition tokens : float Expr.expression * Token.t list =
     let some_match =
       Binary_match.return tokens
       |> Binary_match.bind ~f:(function
-             | MINUS -> Some Expr.Minus
-             | PLUS -> Some Expr.Plus
-             | _ -> None)
+        | MINUS -> Some Expr.Minus
+        | PLUS -> Some Expr.Plus
+        | _ -> None)
       |> Binary_match.to_option
     in
     match some_match with
@@ -131,8 +131,7 @@ and parse_primary tokens =
     any
       [ operator ~token_type:FALSE ~op:(Bool false)
       ; operator ~token_type:TRUE ~op:(Bool true)
-      ; operator ~token_type:NIL ~op:Nil
-        (* Number and String *)
+      ; operator ~token_type:NIL ~op:Nil (* Number and String *)
       ]
   in
   match some_match with

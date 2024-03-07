@@ -80,10 +80,7 @@ module Tokenizer = struct
 
   let slash = char '/' >>| token_ch SLASH <?> "SLASH"
   let newline = char '\n' *> return advance_line <?> "NEWLINE"
-
-  let whitespace =
-    take_while1 (Set.mem whitespace_chars) *> return Fn.id <?> "WHITESPACE"
-  ;;
+  let whitespace = take_while1 (Set.mem whitespace_chars) *> return Fn.id <?> "WHITESPACE"
 
   let string_ =
     char '"' *> take_while (Char.( <> ) '"')
@@ -91,7 +88,7 @@ module Tokenizer = struct
     >>| (fun str t ->
           let t =
             String.fold str ~init:t ~f:(fun t ch ->
-                if is_newline ch then advance_line t else t)
+              if is_newline ch then advance_line t else t)
           in
           token (STRING str) (sprintf "\"%s\"" str) t)
     <?> "STRING"
@@ -128,41 +125,41 @@ module Tokenizer = struct
 
   let program =
     fix (fun p ->
-        at_end_of_input
-        >>= function
-        | true -> eof
-        | false ->
-          choice
-            ~failure_msg:"BUG: All errors should be caught by the error parser."
-            [ left_paren
-            ; right_paren
-            ; left_brace
-            ; right_brace
-            ; comma
-            ; dot
-            ; minus
-            ; plus
-            ; semicolon
-            ; star
-            ; bang_equal
-            ; bang
-            ; equal_equal
-            ; equal
-            ; less_equal
-            ; less
-            ; greater_equal
-            ; greater
-            ; comment
-            ; slash
-            ; newline
-            ; whitespace
-            ; string_
-            ; number
-            ; keyword_or_identifier
-            ; error
-            ]
-          >>| Fn.(flip compose)
-          <*> p)
+      at_end_of_input
+      >>= function
+      | true -> eof
+      | false ->
+        choice
+          ~failure_msg:"BUG: All errors should be caught by the error parser."
+          [ left_paren
+          ; right_paren
+          ; left_brace
+          ; right_brace
+          ; comma
+          ; dot
+          ; minus
+          ; plus
+          ; semicolon
+          ; star
+          ; bang_equal
+          ; bang
+          ; equal_equal
+          ; equal
+          ; less_equal
+          ; less
+          ; greater_equal
+          ; greater
+          ; comment
+          ; slash
+          ; newline
+          ; whitespace
+          ; string_
+          ; number
+          ; keyword_or_identifier
+          ; error
+          ]
+        >>| Fn.(flip compose)
+        <*> p)
     <?> "PROGRAM"
   ;;
 end
@@ -171,7 +168,8 @@ let parse ~source =
   let open Or_error.Let_syntax in
   let t = create () in
   let%bind t_func =
-    Angstrom.parse_string Tokenizer.program source |> Result.map_error ~f:Error.of_string
+    Angstrom.parse_string ~consume:All Tokenizer.program source
+    |> Result.map_error ~f:Error.of_string
   in
   let t = t_func t in
   let%map () =
