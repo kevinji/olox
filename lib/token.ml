@@ -5,48 +5,48 @@ open! Import
 module Type = struct
   type t =
     (* Single-character tokens. *)
-    | LEFT_PAREN
-    | RIGHT_PAREN
-    | LEFT_BRACE
-    | RIGHT_BRACE
-    | COMMA
-    | DOT
-    | MINUS
-    | PLUS
-    | SEMICOLON
-    | SLASH
-    | STAR
+    | Left_paren
+    | Right_paren
+    | Left_brace
+    | Right_brace
+    | Comma
+    | Dot
+    | Minus
+    | Plus
+    | Semicolon
+    | Slash
+    | Star
     (* One or two character tokens. *)
-    | BANG
-    | BANG_EQUAL
-    | EQUAL
-    | EQUAL_EQUAL
-    | GREATER
-    | GREATER_EQUAL
-    | LESS
-    | LESS_EQUAL
+    | Bang
+    | Bang_equal
+    | Equal
+    | Equal_equal
+    | Greater
+    | Greater_equal
+    | Less
+    | Less_equal
     (* Literals. *)
-    | IDENTIFIER of string
-    | STRING of string
-    | NUMBER of float
+    | Identifier of string
+    | String of string
+    | Number of float
     (* Keywords. *)
-    | AND
-    | CLASS
-    | ELSE
-    | FALSE
-    | FUN
-    | FOR
-    | IF
-    | NIL
-    | OR
-    | PRINT
-    | RETURN
-    | SUPER
-    | THIS
-    | TRUE
-    | VAR
-    | WHILE
-    | EOF
+    | And
+    | Class
+    | Else
+    | False
+    | Fun
+    | For
+    | If
+    | Nil
+    | Or
+    | Print
+    | Return
+    | Super
+    | This
+    | True
+    | Var
+    | While
+    | Eof
   [@@deriving compare, sexp_of]
 
   include (val Comparator.make ~compare ~sexp_of_t)
@@ -54,86 +54,86 @@ module Type = struct
   let equal = [%compare.equal: t]
 
   let name = function
-    | LEFT_PAREN -> "LEFT_PAREN"
-    | RIGHT_PAREN -> "RIGHT_PAREN"
-    | LEFT_BRACE -> "LEFT_BRACE"
-    | RIGHT_BRACE -> "RIGHT_BRACE"
-    | COMMA -> "COMMA"
-    | DOT -> "DOT"
-    | MINUS -> "MINUS"
-    | PLUS -> "PLUS"
-    | SEMICOLON -> "SEMICOLON"
-    | SLASH -> "SLASH"
-    | STAR -> "STAR"
-    | BANG -> "BANG"
-    | BANG_EQUAL -> "BANG_EQUAL"
-    | EQUAL -> "EQUAL"
-    | EQUAL_EQUAL -> "EQUAL_EQUAL"
-    | GREATER -> "GREATER"
-    | GREATER_EQUAL -> "GREATER_EQUAL"
-    | LESS -> "LESS"
-    | LESS_EQUAL -> "LESS_EQUAL"
-    | IDENTIFIER (_ : string) -> "IDENTIFIER"
-    | STRING (_ : string) -> "STRING"
-    | NUMBER (_ : float) -> "NUMBER"
-    | AND -> "AND"
-    | CLASS -> "CLASS"
-    | ELSE -> "ELSE"
-    | FALSE -> "FALSE"
-    | FUN -> "FUN"
-    | FOR -> "FOR"
-    | IF -> "IF"
-    | NIL -> "NIL"
-    | OR -> "OR"
-    | PRINT -> "PRINT"
-    | RETURN -> "RETURN"
-    | SUPER -> "SUPER"
-    | THIS -> "THIS"
-    | TRUE -> "TRUE"
-    | VAR -> "VAR"
-    | WHILE -> "WHILE"
-    | EOF -> "EOF"
+    | Left_paren -> "LEFT_PAREN"
+    | Right_paren -> "RIGHT_PAREN"
+    | Left_brace -> "LEFT_BRACE"
+    | Right_brace -> "RIGHT_BRACE"
+    | Comma -> "COMMA"
+    | Dot -> "DOT"
+    | Minus -> "MINUS"
+    | Plus -> "PLUS"
+    | Semicolon -> "SEMICOLON"
+    | Slash -> "SLASH"
+    | Star -> "STAR"
+    | Bang -> "BANG"
+    | Bang_equal -> "BANG_EQUAL"
+    | Equal -> "EQUAL"
+    | Equal_equal -> "EQUAL_EQUAL"
+    | Greater -> "GREATER"
+    | Greater_equal -> "GREATER_EQUAL"
+    | Less -> "LESS"
+    | Less_equal -> "LESS_EQUAL"
+    | Identifier (_ : string) -> "IDENTIFIER"
+    | String (_ : string) -> "STRING"
+    | Number (_ : float) -> "NUMBER"
+    | And -> "AND"
+    | Class -> "CLASS"
+    | Else -> "ELSE"
+    | False -> "FALSE"
+    | Fun -> "FUN"
+    | For -> "FOR"
+    | If -> "IF"
+    | Nil -> "NIL"
+    | Or -> "OR"
+    | Print -> "PRINT"
+    | Return -> "RETURN"
+    | Super -> "SUPER"
+    | This -> "THIS"
+    | True -> "TRUE"
+    | Var -> "VAR"
+    | While -> "WHILE"
+    | Eof -> "EOF"
   ;;
 
   let literal = function
-    | IDENTIFIER str | STRING str -> Some str
-    | NUMBER float -> Some (Float.to_string float)
-    | LEFT_PAREN
-    | RIGHT_PAREN
-    | LEFT_BRACE
-    | RIGHT_BRACE
-    | COMMA
-    | DOT
-    | MINUS
-    | PLUS
-    | SEMICOLON
-    | SLASH
-    | STAR
-    | BANG
-    | BANG_EQUAL
-    | EQUAL
-    | EQUAL_EQUAL
-    | GREATER
-    | GREATER_EQUAL
-    | LESS
-    | LESS_EQUAL
-    | AND
-    | CLASS
-    | ELSE
-    | FALSE
-    | FUN
-    | FOR
-    | IF
-    | NIL
-    | OR
-    | PRINT
-    | RETURN
-    | SUPER
-    | THIS
-    | TRUE
-    | VAR
-    | WHILE
-    | EOF -> None
+    | Identifier str | String str -> Some str
+    | Number float -> Some (Float.to_string float)
+    | Left_paren
+    | Right_paren
+    | Left_brace
+    | Right_brace
+    | Comma
+    | Dot
+    | Minus
+    | Plus
+    | Semicolon
+    | Slash
+    | Star
+    | Bang
+    | Bang_equal
+    | Equal
+    | Equal_equal
+    | Greater
+    | Greater_equal
+    | Less
+    | Less_equal
+    | And
+    | Class
+    | Else
+    | False
+    | Fun
+    | For
+    | If
+    | Nil
+    | Or
+    | Print
+    | Return
+    | Super
+    | This
+    | True
+    | Var
+    | While
+    | Eof -> None
   ;;
 end
 

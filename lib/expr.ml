@@ -2,37 +2,44 @@ open! Core
 open! Async
 open! Import
 
-type _ expression =
-  | Literal : 'a literal -> 'a expression
-  | Unary : 'a unary -> 'a expression
-  | Binary : 'a binary -> 'a expression
-  | Grouping : 'a grouping -> 'a expression
+type expression =
+  | Literal of literal
+  | Unary of unary
+  | Binary of binary
+  | Grouping of grouping
+[@@deriving sexp_of]
 
-and _ literal =
-  | Number : float -> float literal
-  | String : string -> string literal
-  | Bool : bool -> bool literal
+and literal =
+  | Number of float
+  | String of string
+  | Bool of bool
   | Nil
+[@@deriving sexp_of]
 
-and _ grouping = Group : 'a expression -> 'a grouping
+and grouping = Group of expression [@@deriving sexp_of]
 
-and _ unary =
-  | Negative : float expression -> float unary
-  | Not : bool expression -> bool unary
+and unary_symbol =
+  | Negative
+  | Not
+[@@deriving sexp_of]
 
-and _ binary =
-  | Infix : 'expr expression * ('expr, 'out) operator * 'expr expression -> 'out binary
+and unary =
+  | Negative of expression
+  | Not of expression
+[@@deriving sexp_of]
 
-and (_, _) operator =
-  | Equal : ('a, bool) operator
-  | Not_equal : ('a, bool) operator
-  | Less : (float, bool) operator
-  | Less_equal : (float, bool) operator
-  | Greater : (float, bool) operator
-  | Greater_equal : (float, bool) operator
-  | Plus : (float, float) operator
-  | Minus : (float, float) operator
-  | Multiply : (float, float) operator
-  | Divide : (float, float) operator
-  | Concat : (string, string) operator
+and binary = Infix of expression * operator * expression [@@deriving sexp_of]
+
+and operator =
+  | Equal
+  | Not_equal
+  | Less
+  | Less_equal
+  | Greater
+  | Greater_equal
+  | Plus
+  | Minus
+  | Multiply
+  | Divide
+  | Concat
 [@@deriving sexp_of]

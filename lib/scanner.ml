@@ -29,23 +29,23 @@ module Tokenizer = struct
   let keyword_name token_type = Token.Type.name token_type |> String.lowercase
 
   let keyword_map =
-    [ Token.Type.AND
-    ; CLASS
-    ; ELSE
-    ; FALSE
-    ; FUN
-    ; FOR
-    ; IF
-    ; NIL
-    ; OR
-    ; PRINT
-    ; RETURN
-    ; SUPER
-    ; THIS
-    ; TRUE
-    ; VAR
-    ; WHILE
-    ; EOF
+    [ Token.Type.And
+    ; Class
+    ; Else
+    ; False
+    ; Fun
+    ; For
+    ; If
+    ; Nil
+    ; Or
+    ; Print
+    ; Return
+    ; Super
+    ; This
+    ; True
+    ; Var
+    ; While
+    ; Eof
     ]
     |> List.map ~f:(fun token_type -> keyword_name token_type, token_type)
     |> Map.of_alist_exn (module String)
@@ -54,31 +54,31 @@ module Tokenizer = struct
   (* Tokens. *)
   open Angstrom
 
-  let eof = end_of_input *> return (token EOF "") <?> "EOF"
-  let left_paren = char '(' >>| token_ch LEFT_PAREN <?> "LEFT_PAREN"
-  let right_paren = char ')' >>| token_ch RIGHT_PAREN <?> "RIGHT_PAREN"
-  let left_brace = char '{' >>| token_ch LEFT_BRACE <?> "LEFT_BRACE"
-  let right_brace = char '}' >>| token_ch RIGHT_BRACE <?> "RIGHT_BRACE"
-  let comma = char ',' >>| token_ch COMMA <?> "COMMA"
-  let dot = char '.' >>| token_ch DOT <?> "DOT"
-  let minus = char '-' >>| token_ch MINUS <?> "MINUS"
-  let plus = char '+' >>| token_ch PLUS <?> "PLUS"
-  let semicolon = char ';' >>| token_ch SEMICOLON <?> "SEMICOLON"
-  let star = char '*' >>| token_ch STAR <?> "STAR"
-  let bang_equal = string "!=" >>| token BANG_EQUAL <?> "BANG_EQUAL"
-  let bang = char '!' >>| token_ch BANG <?> "BANG"
-  let equal_equal = string "==" >>| token EQUAL_EQUAL <?> "EQUAL_EQUAL"
-  let equal = char '=' >>| token_ch EQUAL <?> "EQUAL"
-  let less_equal = string "<=" >>| token LESS_EQUAL <?> "LESS_EQUAL"
-  let less = char '<' >>| token_ch LESS <?> "LESS"
-  let greater_equal = string ">=" >>| token GREATER_EQUAL <?> "GREATER_EQUAL"
-  let greater = char '>' >>| token_ch GREATER <?> "GREATER"
+  let eof = end_of_input *> return (token Eof "") <?> "EOF"
+  let left_paren = char '(' >>| token_ch Left_paren <?> "LEFT_PAREN"
+  let right_paren = char ')' >>| token_ch Right_paren <?> "RIGHT_PAREN"
+  let left_brace = char '{' >>| token_ch Left_brace <?> "LEFT_BRACE"
+  let right_brace = char '}' >>| token_ch Right_brace <?> "RIGHT_BRACE"
+  let comma = char ',' >>| token_ch Comma <?> "COMMA"
+  let dot = char '.' >>| token_ch Dot <?> "DOT"
+  let minus = char '-' >>| token_ch Minus <?> "MINUS"
+  let plus = char '+' >>| token_ch Plus <?> "PLUS"
+  let semicolon = char ';' >>| token_ch Semicolon <?> "SEMICOLON"
+  let star = char '*' >>| token_ch Star <?> "STAR"
+  let bang_equal = string "!=" >>| token Bang_equal <?> "BANG_EQUAL"
+  let bang = char '!' >>| token_ch Bang <?> "BANG"
+  let equal_equal = string "==" >>| token Equal_equal <?> "EQUAL_EQUAL"
+  let equal = char '=' >>| token_ch Equal <?> "EQUAL"
+  let less_equal = string "<=" >>| token Less_equal <?> "LESS_EQUAL"
+  let less = char '<' >>| token_ch Less <?> "LESS"
+  let greater_equal = string ">=" >>| token Greater_equal <?> "GREATER_EQUAL"
+  let greater = char '>' >>| token_ch Greater <?> "GREATER"
 
   let comment =
     string "//" *> skip_while (Fn.non is_newline) *> return Fn.id <?> "COMMENT"
   ;;
 
-  let slash = char '/' >>| token_ch SLASH <?> "SLASH"
+  let slash = char '/' >>| token_ch Slash <?> "SLASH"
   let newline = char '\n' *> return advance_line <?> "NEWLINE"
   let whitespace = take_while1 (Set.mem whitespace_chars) *> return Fn.id <?> "WHITESPACE"
 
@@ -90,7 +90,7 @@ module Tokenizer = struct
             String.fold str ~init:t ~f:(fun t ch ->
               if is_newline ch then advance_line t else t)
           in
-          token (STRING str) (sprintf "\"%s\"" str) t)
+          token (String str) (sprintf "\"%s\"" str) t)
     <?> "STRING"
   ;;
 
@@ -102,7 +102,7 @@ module Tokenizer = struct
     char '.' *> int
     >>| sprintf "%s.%s" int_part
     <|> return int_part
-    >>| (fun number -> token (NUMBER (Float.of_string number)) number)
+    >>| (fun number -> token (Number (Float.of_string number)) number)
     <?> "NUMBER"
   ;;
 
@@ -111,7 +111,7 @@ module Tokenizer = struct
     >>| (fun identifier ->
           match Map.find keyword_map identifier with
           | Some keyword_type -> token keyword_type identifier
-          | None -> token (IDENTIFIER identifier) identifier)
+          | None -> token (Identifier identifier) identifier)
     <?> "KEYWORD / IDENTIFIER"
   ;;
 

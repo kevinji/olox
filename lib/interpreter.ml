@@ -5,7 +5,11 @@ open! Deferred.Or_error.Let_syntax
 
 let run ~source =
   match Scanner.parse ~source with
-  | Ok tokens -> List.iter tokens ~f:(printf !"%{Token}\n")
+  | Ok tokens ->
+    List.iter tokens ~f:(printf !"%{Token}\n");
+    let expr, tokens = Parser.parse_expression tokens in
+    print_s [%sexp (expr : Expr.expression)];
+    print_s [%sexp (tokens : Token.t list)]
   | Error error -> printf !"%{Error#hum}\n" error
 ;;
 

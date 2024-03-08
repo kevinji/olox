@@ -1,4 +1,6 @@
 open! Core
 open! Async
 
-let print_err ~line message = printf "[line %d] Error: %s\n" line message
+let print_err ~line ?(where = "") message =
+  eprintf "[line %d] Error%s: %s\n" line where message
+;;

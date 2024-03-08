@@ -5,48 +5,48 @@ open! Import
 module Type : sig
   type t =
     (* Single-character tokens. *)
-    | LEFT_PAREN
-    | RIGHT_PAREN
-    | LEFT_BRACE
-    | RIGHT_BRACE
-    | COMMA
-    | DOT
-    | MINUS
-    | PLUS
-    | SEMICOLON
-    | SLASH
-    | STAR
+    | Left_paren
+    | Right_paren
+    | Left_brace
+    | Right_brace
+    | Comma
+    | Dot
+    | Minus
+    | Plus
+    | Semicolon
+    | Slash
+    | Star
     (* One or two character tokens. *)
-    | BANG
-    | BANG_EQUAL
-    | EQUAL
-    | EQUAL_EQUAL
-    | GREATER
-    | GREATER_EQUAL
-    | LESS
-    | LESS_EQUAL
+    | Bang
+    | Bang_equal
+    | Equal
+    | Equal_equal
+    | Greater
+    | Greater_equal
+    | Less
+    | Less_equal
     (* Literals. *)
-    | IDENTIFIER of string
-    | STRING of string
-    | NUMBER of float
+    | Identifier of string
+    | String of string
+    | Number of float
     (* Keywords. *)
-    | AND
-    | CLASS
-    | ELSE
-    | FALSE
-    | FUN
-    | FOR
-    | IF
-    | NIL
-    | OR
-    | PRINT
-    | RETURN
-    | SUPER
-    | THIS
-    | TRUE
-    | VAR
-    | WHILE
-    | EOF
+    | And
+    | Class
+    | Else
+    | False
+    | Fun
+    | For
+    | If
+    | Nil
+    | Or
+    | Print
+    | Return
+    | Super
+    | This
+    | True
+    | Var
+    | While
+    | Eof
   [@@deriving compare, sexp_of]
 
   include Comparator.S with type t := t
